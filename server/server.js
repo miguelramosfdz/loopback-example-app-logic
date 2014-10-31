@@ -10,6 +10,8 @@ app.use(loopback.favicon());
 app.use(loopback.compress());
 
 // -- Add your pre-processing middleware here --
+var reqTracker = require('./middleware/tracker');
+app.use(reqTracker);
 
 // boot scripts mount components like REST API
 boot(app, __dirname);
@@ -20,6 +22,11 @@ boot(app, __dirname);
 // Example:
 //   var path = require('path');
 //   app.use(loopback.static(path.resolve(__dirname, '../client')));
+
+app.use('/datetime', function(req, res, next) {
+  console.log('Date time middleware triggered');
+  res.json({datetime: new Date()});
+});
 
 // Requests that get this far won't be handled
 // by any middleware. Convert them into a 404 error
